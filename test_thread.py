@@ -7,21 +7,31 @@ win.geometry('200x200')
 win.resizable(False,False)
 
 def sound():
-    playsound('beep-07a.mp3', block= True)
+    playsound('beep-07a.mp3')
+    # playsound()
 
 def display(name):
     label1 = Label(win, text=name, bg='red')
     label1.pack()
 
-thread2= threading.Thread(target= display, args=('long',))
-thread1= threading.Thread(target= sound)
+def display1(name):
+    label1 = Label(win, text=name, bg='red')
+    label1.pack()
 
 def alo():
-    print('Long')
+    thread2= threading.Thread(target= display('long'))
+    thread1= threading.Thread(target= sound())
+    thread2.start()
     thread1.start()
     thread1.join()
-    # label2 = Label(win, text='Long', bg='red')
-    # label2.pack()
+    thread2.join()
+    # display1('long')
+    # display('alo')
+
+
+
+
+
 
 # def square(number):
 #     print('Calculate square of numbers')

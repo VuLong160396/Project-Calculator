@@ -75,11 +75,11 @@ def press_num(widget, number):
     #Dãy số của toán hạng 1
     else:
         widget.insert(len(widget.get()),number)
+    # playsound('beep-07a.mp3')
 
 #Hàm dấu(toán tử)
 def press_operator(clicked_operator):
-    # global operator
-    # operator = clicked_operator
+    # playsound('beep-07a.mp3')
     global operator, first_number, second_number
     if first_number != '' and operator != '' and second_number != '':
         # temp = first_number
@@ -91,7 +91,7 @@ def press_operator(clicked_operator):
 #Hàm xóa trắng màn hình
 def clear(widget):
     global first_number, second_number, operator
-
+    playsound('button-3.mp3')
     widget.delete(0, END)
     first_number = ''
     second_number = ''
@@ -99,6 +99,7 @@ def clear(widget):
 
 #Hàm hiển thị sau khi bấm dấu '='
 def press_equal():
+    playsound('beep-07a.mp3')
     global operator, first_number, second_number
     display.delete(0, END)
     if first_number != ''and second_number != '' and operator != '':
@@ -115,7 +116,8 @@ def press_equal():
     first_number = ''
     second_number = ''
     operator = ''
-    # playsound('Ting.mp3')
+
+
 
 #Hàm tính phần trăm (%)
 def press_change_value():
@@ -123,10 +125,7 @@ def press_change_value():
         display.insert(0,'-')
     elif '-' in display.get():
         display.delete(-1)
-
-
-
-
+    # playsound('beep-07a.mp3')
 
 
 def press_per():
@@ -139,8 +138,7 @@ def press_per():
         display.delete(0, END)
         display.insert(0,round(float(first_number)/100,2))
         first_number = ''
-    else:
-        pass
+    # playsound('beep-07a.mp3')
 
 '''#__________________________________________
 
@@ -166,6 +164,9 @@ def press_per():
 
 Hàm press_operater():
     khi thực hiện liên tục tính toán mà k ấn dấu '=', thì các operator thực hiện như dấu bằng tuy nhiên chỉ được 1 lần do sau khi gọi hàm press_equal() thì số hạng và operator đã bị xóa hết
+14/10 Chưa xử lý được dấu (+/-)
+      Chưa xử lý được phép tính 
+đã thêm sound 2 nút clear và equals
 #__________________________________________'''
 
 
