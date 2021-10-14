@@ -1,6 +1,8 @@
 from tkinter import *
 from cal import *
 from playsound import playsound
+import threading
+import time
 
 window = Tk()
 window.title('Calculator')
@@ -62,21 +64,14 @@ def press_num(widget, number):
         widget.insert(0, number)
         if '-' in widget.get():
             print(type(widget.get()))
-
-
         second_number = number
-
     
     #Dãy số của toán hạng 2(nhiều hơn 1 ký tự)
     elif second_number != '':
         widget.insert(len(widget.get()),number)
         if '-' in widget.get():
             print(type(widget.get()))
-
-
         second_number = widget.get()
-
-
     #Dãy số của toán hạng 1
     else:
         widget.insert(len(widget.get()),number)
@@ -93,7 +88,6 @@ def press_operator(clicked_operator):
     else:
         operator = clicked_operator
 
-
 #Hàm xóa trắng màn hình
 def clear(widget):
     global first_number, second_number, operator
@@ -102,7 +96,6 @@ def clear(widget):
     first_number = ''
     second_number = ''
     operator = ''
-
 
 #Hàm hiển thị sau khi bấm dấu '='
 def press_equal():
