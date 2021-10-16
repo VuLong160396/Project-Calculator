@@ -19,7 +19,6 @@ second_number = ''
 operator = ''
 
 def plus(first_number, second_number):
-    # if first_number.number():
     return first_number+second_number
 
 def minus(first_number, second_number):
@@ -44,39 +43,24 @@ def calculate(operator, first_number, second_number):
         return divide(first_number, second_number)
 
 #Hàm ấn nút
-def press_num(widget, number):
+def press_num(number):
     global operator, first_number, second_number
-
-    #Ấn số tiếp theo sau khi ấn '='(kết qua của 1 phép toán trước đó) vì sau dấu bằng xóa hết first_number, second_number, operator
-    if operator == '' and second_number == '' and first_number == '':
-        widget.delete(0, END)
-        widget.insert(0, number)
-        first_number = widget.get()
-
-    elif operator == '' and second_number == '' and first_number != '':
-        first_number = ''
-        widget.insert(len(widget.get()),number)
-        first_number = widget.get()
-
-    #Ấn button số lần đầu sau khi bấm toán tử
-    elif operator != '' and second_number == '':  
-        # widget.insert(len(widget.get()),number)
-        first_number = widget.get()
-        widget.delete(0, END)
-        widget.insert(0, number)
-        second_number = number
-    
-    #Dãy số của toán hạng 2(nhiều hơn 1 ký tự)
-    elif operator != '' and second_number != '':
-        second_number = ''
-        widget.insert(len(widget.get()),number)
-        second_number = widget.get()
-    #Dãy số của toán hạng 1
-    # else:
-    #     widget.insert(len(widget.get()),number)
-
-
-
+    if display.get() != '':
+        # display.delete(0, END)
+        if operator == '':
+            display.insert(len(display.get()),number)
+            first_number = display.get()
+            # print(first_number)
+        elif operator != '' and second_number == '':
+            display.delete(0, END)
+            display.insert(0,number)
+            second_number = number
+        elif operator != '' and second_number != '':
+            display.insert(len(display.get()),number)
+            second_number = display.get()
+    else:
+        display.insert(0,number)
+        first_number = display.get()
 
 
 
@@ -87,67 +71,70 @@ def press_num(widget, number):
 #Hàm dấu(toán tử)
 def press_operator(clicked_operator):
     global operator, first_number, second_number
-    if first_number != '' and operator != '' and second_number != '':
-        press_equal()
-    else:
+    if display.get() != '':
+        first_number = display.get()
         operator = clicked_operator
 
 #Hàm xóa trắng màn hình
-def clear(widget):
+def clear():
     global first_number, second_number, operator
-    playsound('button-3.mp3')
-    widget.delete(0, END)
+    # playsound('button-3.mp3')
+    display.delete(0, END)
     first_number = ''
     second_number = ''
     operator = ''
 
 #Hàm hiển thị sau khi bấm dấu '='
 def press_equal():
-    playsound('beep-07a.mp3')
+    # playsound('beep-07a.mp3')
     global operator, first_number, second_number
-    display.delete(0, END)
     if first_number != ''and second_number != '' and operator != '':
-        #Kiểm tra số thập phân hay số nguyên:
-        if calculate(operator, float(first_number), float(second_number)) == int(calculate(operator, float(first_number), float(second_number))): 
-            # print('Số nguyên')
-            display.insert(0, int(calculate(operator, float(first_number), float(second_number))))
-        else:
-            # print('Số thập phân')
-                display.insert(0, (calculate(operator, float(first_number), float(second_number))))
+        display.delete(0, END)
+        print(f'{first_number}  {operator}  {second_number}')
+        result = calculate(operator, float(first_number), float(second_number))
+        print(int(result)) if result.is_integer() else print(round(result,10))
+        display.insert(0, int(result)) if result.is_integer() else display.insert(0, round(result,8))
+
+        first_number = ''
+        second_number = ''
+        operator = ''       
     else:
-        clear(display)
+        clear()
 
-    first_number = ''
-    second_number = ''
-    operator = ''
 
+
+def press_point():
+    if display.get() != '' and '.' not in display.get():
+        display.insert(len(display.get()),'.')
 
 
 #Hàm tính phần trăm (%)
 def press_change_value():
     global first_number , second_number, operator
-    if len(display.get())>0:
+    if display.get() != '':
         if '-' not in display.get():
             display.insert(0,'-')
-            if first_number != '' and second_number == '':
+            if first_number == '':
+                first_number = display.get()
+            elif first_number != '' and second_number == '':
                 first_number = first_number * (-1)
             elif operator != '':
                 second_number = second_number * (-1)
         elif '-' in display.get():
             display.delete(-1)
-    # playsound('beep-07a.mp3')
+    else:
+        clear()
 
 
 def press_per():
-    global operator, first_number, second_number
-    first_number = ''
-    second_number = ''
-    operator = ''
+    global first_number,operator,second_number
+
     if display.get() != '':
         first_number = display.get()
         display.delete(0, END)
+        second_number = ''
+        operator = ''
         display.insert(0,round(float(first_number)/100,2))
-        first_number = ''
     # playsound('beep-07a.mp3')
 
 '''#__________________________________________
@@ -185,7 +172,7 @@ frame1 = Frame(window)
 frame1.pack(fill=X)
 
 
-button_AC = Button(frame1, text='AC',width=6, command= lambda: clear(display), border=5)
+button_AC = Button(frame1, text='AC',width=6, command= lambda: clear(), border=5)
 button_AC.grid(row=0, column=0)
 
 
@@ -200,39 +187,39 @@ button_div.grid(row=0, column=3)
 
 
 
-button7 = Button(frame1, text='7',width=6, command= lambda: press_num(display,7), border=5)
+button7 = Button(frame1, text='7',width=6, command= lambda: press_num(7), border=5)
 button7.grid(row=1, column=0)
 
-button8 = Button(frame1, text='8',width=6, command= lambda: press_num(display,8), border=5)
+button8 = Button(frame1, text='8',width=6, command= lambda: press_num(8), border=5)
 button8.grid(row=1, column=1)
 
-button9 = Button(frame1, text='9',width=6, command= lambda: press_num(display,9), border=5)
+button9 = Button(frame1, text='9',width=6, command= lambda: press_num(9), border=5)
 button9.grid(row=1, column=2)
 
 button_x = Button(frame1, text='x',bg='orange',width=6, border=5, command = lambda: press_operator('*'))
 button_x.grid(row=1, column=3)
 
 
-button4 = Button(frame1, text='4',width=6, command= lambda: press_num(display,4), border=5)
+button4 = Button(frame1, text='4',width=6, command= lambda: press_num(4), border=5)
 button4.grid(row=2, column=0)
 
-button5 = Button(frame1, text='5',width=6, command= lambda: press_num(display,5), border=5)
+button5 = Button(frame1, text='5',width=6, command= lambda: press_num(5), border=5)
 button5.grid(row=2, column=1)
 
-button6 = Button(frame1, text='6',width=6, command= lambda: press_num(display,6), border=5)
+button6 = Button(frame1, text='6',width=6, command= lambda: press_num(6), border=5)
 button6.grid(row=2, column=2)
 
 button_minus = Button(frame1, text='-',bg='orange',width=6, border=5, command = lambda: press_operator('-'))
 button_minus.grid(row=2, column=3)
 
 
-button1 = Button(frame1, text='1',width=6, command= lambda: press_num(display,1), border=5)
+button1 = Button(frame1, text='1',width=6, command= lambda: press_num(1), border=5)
 button1.grid(row=3, column=0)
 
-button2 = Button(frame1, text='2',width=6, command= lambda: press_num(display,2), border=5)
+button2 = Button(frame1, text='2',width=6, command= lambda: press_num(2), border=5)
 button2.grid(row=3, column=1)
 
-button3 = Button(frame1, text='3',width=6, command= lambda: press_num(display,3), border=5)
+button3 = Button(frame1, text='3',width=6, command= lambda: press_num(3), border=5)
 button3.grid(row=3, column=2)
 
 button_plus = Button(frame1, text='+',bg='orange',width=6, border=5, command = lambda: press_operator('+'))
@@ -242,10 +229,10 @@ button_plus.grid(row=3, column=3)
 frame2 = Frame(window)
 frame2.pack(side=LEFT)
 
-button0 = Button(frame1, text='0',width=15, command= lambda: press_num(display,0), border=5)
+button0 = Button(frame1, text='0',width=15, command= lambda: press_num(0), border=5)
 button0.grid(row=4, columnspan=2)
 
-button_point = Button(frame1, text='.',width=6, command= lambda: press_num(display,'.'), border=5)
+button_point = Button(frame1, text='.',width=6, command= lambda: press_point(), border=5)
 button_point.grid(row=4, column=2)
 
 button_eq = Button(frame1, text='=',width=6, bg='orange', border=5, command= lambda: press_equal())
