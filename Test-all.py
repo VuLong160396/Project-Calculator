@@ -63,11 +63,6 @@ def press_num(number):
         first_number = display.get()
 
 
-
-
-
-
-
 #Hàm dấu(toán tử)
 def press_operator(clicked_operator):
     global operator, first_number, second_number
@@ -78,7 +73,7 @@ def press_operator(clicked_operator):
 #Hàm xóa trắng màn hình
 def clear():
     global first_number, second_number, operator
-    # playsound('button-3.mp3')
+    playsound('button-3.mp3')
     display.delete(0, END)
     first_number = ''
     second_number = ''
@@ -101,8 +96,7 @@ def press_equal():
     else:
         clear()
 
-
-
+#Hàm hiển thị sau khi bấm dấu '.'
 def press_point():
     if display.get() != '' and '.' not in display.get():
         display.insert(len(display.get()),'.')
@@ -119,7 +113,8 @@ def press_change_value():
             elif first_number != '' and second_number == '':
                 first_number = first_number * (-1)
             elif operator != '':
-                second_number = second_number * (-1)
+                # second_number = second_number * (-1)
+                second_number = float(display.get())
         elif '-' in display.get():
             display.delete(-1)
     else:
@@ -164,6 +159,7 @@ Hàm press_operater():
 14/10 Chưa xử lý được dấu (+/-)
       Chưa xử lý được phép tính 
 đã thêm sound 2 nút clear và equals
+17/10 Xử lý số hạng thứ 2 có dấu '-' và nhiều hơn 1 chữ số
 #__________________________________________'''
 
 
