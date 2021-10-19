@@ -210,6 +210,7 @@ def execute():
     button_eq = Button(frame1, text='=',width=6, bg='orange', border=5, command= lambda: press_equal())
     button_eq.grid(row=4, column=3)
 
+#______________Hàm thực thi chính____________
 if __name__ == '__main__':
     execute()
 
